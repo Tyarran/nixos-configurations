@@ -1,7 +1,7 @@
 let
-  nova = "age1w9hrgxmtk30ysfqa480q0v5k9490wlq4p7yzcjg2w0qk44useqeqwpdyvy";
-  orion = "age1ahk9g5w9nu03tr25y2ql227ee20np75hzrkjgaj9ylfv0fdz7fcsvww5zc";
-in
-{
+  nova = "age1gv85lzqxvd35fjmng4n3aafclqgm4gsfq5nq3k5ue2m0a4qqdeqq085msl";
+  orion = "age1emw7j34yfy03ry368065m3ftm7mynpq8gp20tqkz3z3krcxjugusq5nfkk";
+in {
   "secrets/orion-romain-password.age".publicKeys = [ nova orion ];
+  "secrets/nova-romain-password.age".publicKeys = [ nova ];
 }

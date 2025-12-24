@@ -2,20 +2,16 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, agenix, ... }:
 
 {
-  imports = [
-    ./hardware-configuration.nix
-    ./users.nix
-    ./services
-  ];
+  imports = [ ./hardware-configuration.nix ./users.nix ./services ];
 
-  age.secrets.romain-password = {
+  age.secrets.orion-romain-password = {
     file = ../secrets/orion-romain-password.age;
   };
 
-  age.identityPaths = [ "/etc/ssh/ssh_host_ed25519_key" ];
+  age.identityPaths = [ "/etc/age/age.key" ];
 
   boot.loader.grub.enable = false;
   boot.loader.generic-extlinux-compatible.enable = true;
@@ -36,7 +32,8 @@
     htop
     btop
     podman-compose
-    ragenix
+    agenix
+    ssh-to-age
   ];
 
   system.stateVersion = "25.11";
