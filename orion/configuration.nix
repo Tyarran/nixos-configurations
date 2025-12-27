@@ -18,8 +18,6 @@
 
   networking.hostName = "orion";
   networking.networkmanager.enable = true;
-  networking.firewall.allowedTCPPorts = [ 53 9090 443 139 445 ];
-  networking.firewall.allowedUDPPorts = [ 53 443 137 138 ];
 
   time.timeZone = "Europe/Paris";
 
@@ -28,13 +26,14 @@
   environment.systemPackages = with pkgs; [
     neovim
     wget
-    cockpit
     htop
     btop
-    podman-compose
     agenix
     ssh-to-age
+    tree
   ];
+
+  services.irqbalance.enable = true;
 
   system.stateVersion = "25.11";
 

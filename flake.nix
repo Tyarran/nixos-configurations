@@ -8,13 +8,22 @@
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    arion = {
+      url = "github:hercules-ci/arion";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, agenix, ... }: {
+  outputs = { self, nixpkgs, agenix, arion, ... }: {
     nixosConfigurations = {
       orion = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
-        modules = [ ./orion/configuration.nix agenix.nixosModules.default ];
+        modules = [
+          ./orion/configuration.nix
+          agenix.nixosModules.default
+          arion.nixosModules.arion
+        ];
         specialArgs = { inherit agenix; };
       };
       nova = nixpkgs.lib.nixosSystem {

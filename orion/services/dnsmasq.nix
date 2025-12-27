@@ -11,4 +11,12 @@
       log-facility = "/var/log/dnsmasq.log";
     };
   };
+
+  networking.hosts = {
+    "192.168.1.200" = [ "orion" ];
+    "192.168.1.169" = [ "callisto" ];
+  };
+
+  networking.firewall.allowedTCPPorts = [ 53 ];
+  networking.firewall.allowedUDPPorts = [ 53 ];
 }

@@ -4,4 +4,5 @@ let
 in {
   "secrets/orion-romain-password.age".publicKeys = [ nova orion ];
   "secrets/nova-romain-password.age".publicKeys = [ nova ];
+  "secrets/orion-immich-db-password.age".publicKeys = [ nova orion ];
 }

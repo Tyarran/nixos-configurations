@@ -43,6 +43,9 @@ in {
     experimental-features = nix-command flakes
   '';
 
+  # Enable ARM emulation for building Raspberry Pi configs
+  # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
@@ -53,7 +56,7 @@ in {
         owner = "NixOS";
         repo = "nixpkgs";
         rev = "nixos-unstable";
-        sha256 = "sha256-G/WVghka6c4bAzMhTwT2vjLccg/awmHkdKSd2JrycLc=";
+        sha256 = "sha256-QEhk0eXgyIqTpJ/ehZKg9IKS7EtlWxF3N7DXy42zPfU=";
       }) {
         system = prev.stdenv.hostPlatform.system;
         config = final.config;
