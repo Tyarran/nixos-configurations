@@ -17,7 +17,6 @@ in {
     ./locale.nix
     ./keyboard.nix
     ./services
-    # cockpit-nix.module  # Active le module cockpit-nix
   ];
 
   # Secrets management
