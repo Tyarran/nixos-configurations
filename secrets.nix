@@ -5,4 +5,7 @@ in {
   "secrets/orion-romain-password.age".publicKeys = [ nova orion ];
   "secrets/nova-romain-password.age".publicKeys = [ nova ];
   "secrets/orion-immich-db-password.age".publicKeys = [ nova orion ];
+  "secrets/orion-scaleway-access-key.age".publicKeys = [ nova orion ];
+  "secrets/orion-scaleway-secret-key.age".publicKeys = [ nova orion ];
+  "secrets/orion-backup-password.age".publicKeys = [ nova orion ];
 }

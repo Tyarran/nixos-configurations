@@ -31,6 +31,7 @@
     agenix
     ssh-to-age
     tree
+    rclone
   ];
 
   services.irqbalance.enable = true;
