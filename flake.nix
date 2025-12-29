@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
 
     agenix = {
       url = "github:ryantm/agenix";
@@ -15,7 +16,7 @@
     };
   };
 
-  outputs = { self, nixpkgs, agenix, arion, ... }: {
+  outputs = { self, nixpkgs, nixpkgs-unstable, agenix, arion, ... }: {
     nixosConfigurations = {
       orion = nixpkgs.lib.nixosSystem {
         system = "aarch64-linux";
@@ -26,7 +27,7 @@
         ];
         specialArgs = { inherit agenix; };
       };
-      nova = nixpkgs.lib.nixosSystem {
+      nova = nixpkgs-unstable.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [ ./nova/configuration.nix agenix.nixosModules.default ];
         specialArgs = { inherit agenix; };

@@ -37,6 +37,8 @@
       libva-utils
       nodejs_24
       nixfmt
+      statix
+      deadnix
     ];
     hashedPasswordFile = config.age.secrets.romain-password.path;
   };
