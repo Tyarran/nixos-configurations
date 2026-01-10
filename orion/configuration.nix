@@ -2,10 +2,20 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, lib, pkgs, agenix, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  agenix,
+  ...
+}:
 
 {
-  imports = [ ./hardware-configuration.nix ./users.nix ./services ];
+  imports = [
+    ./hardware-configuration.nix
+    ./users.nix
+    ./services
+  ];
 
   age.secrets.orion-romain-password = {
     file = ../secrets/orion-romain-password.age;
@@ -21,7 +31,10 @@
 
   time.timeZone = "Europe/Paris";
 
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   environment.systemPackages = with pkgs; [
     neovim

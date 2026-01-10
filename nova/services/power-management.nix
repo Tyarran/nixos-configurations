@@ -12,7 +12,9 @@
       performance = "throughput-performance";
       power-saver = "powersave";
     };
-    battery = { balanced = "balanced-battery"; };
+    battery = {
+      balanced = "balanced-battery";
+    };
   };
 
   # IrqBalance - distribute hardware interrupts across CPUs

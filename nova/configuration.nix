@@ -2,15 +2,21 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running 'nixos-help').
 
-{ config, pkgs, lib, agenix, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  agenix,
+  ...
+}:
 
 let
   # Import du module cockpit-nix depuis GitHub
-  cockpit-nix = import (fetchTarball
-    "https://github.com/addreas/cockpit-nix/archive/main.tar.gz") {
-      inherit pkgs;
-    };
-in {
+  cockpit-nix = import (fetchTarball "https://github.com/addreas/cockpit-nix/archive/main.tar.gz") {
+    inherit pkgs;
+  };
+in
+{
   imports = [
     ./hardware-configuration.nix
     ./users.nix
@@ -20,7 +26,9 @@ in {
   ];
 
   # Secrets management
-  age.secrets.romain-password = { file = ../secrets/nova-romain-password.age; };
+  age.secrets.romain-password = {
+    file = ../secrets/nova-romain-password.age;
+  };
   age.identityPaths = [ "/home/romain/.age/age.key" ];
 
   # Bootloader
@@ -43,7 +51,7 @@ in {
   '';
 
   # Enable ARM emulation for building Raspberry Pi configs
-  # boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
+  boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
 
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
@@ -51,15 +59,18 @@ in {
   # Unstable overlay
   nixpkgs.overlays = [
     (final: prev: {
-      unstable = import (prev.fetchFromGitHub {
-        owner = "NixOS";
-        repo = "nixpkgs";
-        rev = "nixos-unstable";
-        sha256 = "sha256-QEhk0eXgyIqTpJ/ehZKg9IKS7EtlWxF3N7DXy42zPfU=";
-      }) {
-        system = prev.stdenv.hostPlatform.system;
-        config = final.config;
-      };
+      unstable =
+        import
+          (prev.fetchFromGitHub {
+            owner = "NixOS";
+            repo = "nixpkgs";
+            rev = "nixos-unstable";
+            sha256 = "sha256-QEhk0eXgyIqTpJ/ehZKg9IKS7EtlWxF3N7DXy42zPfU=";
+          })
+          {
+            system = prev.stdenv.hostPlatform.system;
+            config = final.config;
+          };
     })
   ];
 

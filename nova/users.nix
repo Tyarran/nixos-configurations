@@ -9,7 +9,10 @@
     isNormalUser = true;
     shell = pkgs.zsh;
     description = "Romain";
-    extraGroups = [ "networkmanager" "wheel" ];
+    extraGroups = [
+      "networkmanager"
+      "wheel"
+    ];
     packages = with pkgs; [
       zsh
       fzf

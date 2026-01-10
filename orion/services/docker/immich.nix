@@ -29,7 +29,10 @@
             UPLOAD_LOCATION = "./library";
           };
 
-          depends_on = [ "redis" "database" ];
+          depends_on = [
+            "redis"
+            "database"
+          ];
           restart = "always";
         };
 
@@ -54,19 +57,22 @@
 
         # === Redis ===
         redis.service = {
-          image =
-            "docker.io/redis:6.2-alpine@sha256:905c4ee67b8e0aa955331960d2aa745781e6bd89afc44a8584bfd13bc890f0ae";
+          image = "docker.io/redis:6.2-alpine@sha256:905c4ee67b8e0aa955331960d2aa745781e6bd89afc44a8584bfd13bc890f0ae";
           container_name = "immich_redis";
 
-          healthcheck = { test = [ "CMD-SHELL" "redis-cli ping || exit 1" ]; };
+          healthcheck = {
+            test = [
+              "CMD-SHELL"
+              "redis-cli ping || exit 1"
+            ];
+          };
 
           restart = "always";
         };
 
         # === PostgreSQL with pgvecto.rs ===
         database.service = {
-          image =
-            "docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
+          image = "docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
           container_name = "immich_postgres";
 
           environment = {
@@ -99,8 +105,7 @@
           healthcheck = {
             test = [
               "CMD-SHELL"
-              ''
-                pg_isready --dbname="$POSTGRES_DB" --username="$POSTGRES_USER" || exit 1''
+              ''pg_isready --dbname="$POSTGRES_DB" --username="$POSTGRES_USER" || exit 1''
             ];
             interval = "5m";
             start_period = "5m";
@@ -111,7 +116,9 @@
       };
 
       # Volumes nommés
-      docker-compose.volumes = { model-cache = { }; };
+      docker-compose.volumes = {
+        model-cache = { };
+      };
     };
   };
 

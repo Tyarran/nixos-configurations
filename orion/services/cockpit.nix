@@ -1,8 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
 
-  environment.systemPackages = with pkgs; [ sscg cockpit ];
+  environment.systemPackages = with pkgs; [
+    sscg
+    cockpit
+  ];
 
   security.pam.services.cockpit = { };
 
@@ -12,7 +20,10 @@
   #
   # };
 
-  networking.firewall.allowedTCPPorts = [ 9090 443 ];
+  networking.firewall.allowedTCPPorts = [
+    9090
+    443
+  ];
   networking.firewall.allowedUDPPorts = [ 443 ];
 
   services.cockpit = {
@@ -23,10 +34,15 @@
         # Environment =
         #   "PATH=${pkgs.cockpit}/libexec:${pkgs.coreutils}/bin:${pkgs.openssh}/bin:${pkgs.sudo}/bin";
       };
-      Log = { Fatal = "warnings"; };
+      Log = {
+        Fatal = "warnings";
+      };
     };
 
-    allowed-origins = [ "https://orion:9090" "https://192.168.1.200" ];
+    allowed-origins = [
+      "https://orion:9090"
+      "https://192.168.1.200"
+    ];
   };
 
 }

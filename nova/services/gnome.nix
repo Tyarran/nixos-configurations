@@ -9,5 +9,8 @@
   services.desktopManager.gnome.enable = true;
 
   # GNOME packages
-  environment.systemPackages = with pkgs; [ gnome-software gnome-tweaks ];
+  environment.systemPackages = with pkgs; [
+    gnome-software
+    gnome-tweaks
+  ];
 }
