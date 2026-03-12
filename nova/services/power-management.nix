@@ -19,18 +19,18 @@
 
   powerManagement.cpuFreqGovernor = "powersave";
 
-  systemd.services.set-cpu-epp = {
-    description = "Set CPU energy performance preference";
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig.Type = "oneshot";
-    script = ''
-      for policy in /sys/devices/system/cpu/cpufreq/policy*; do
-        if [ -f "$policy/energy_performance_preference" ]; then
-          echo balance_power > "$policy/energy_performance_preference"
-        fi
-      done
-    '';
-  };
+  # systemd.services.set-cpu-epp = {
+  #   description = "Set CPU energy performance preference";
+  #   wantedBy = [ "multi-user.target" ];
+  #   serviceConfig.Type = "oneshot";
+  #   script = ''
+  #     for policy in /sys/devices/system/cpu/cpufreq/policy*; do
+  #       if [ -f "$policy/energy_performance_preference" ]; then
+  #         echo balance_power > "$policy/energy_performance_preference"
+  #       fi
+  #     done
+  #   '';
+  # };
 
   # IrqBalance - distribute hardware interrupts across CPUs
   # services.irqbalance.enable = true;

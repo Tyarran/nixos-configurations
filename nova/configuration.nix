@@ -51,6 +51,8 @@
   nix.extraOptions = ''
     experimental-features = nix-command flakes
   '';
+  nix.settings.sandbox = false;
+  nix.settings.build-use-sandbox = false;
 
   # Enable ARM emulation for building Raspberry Pi configs
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];

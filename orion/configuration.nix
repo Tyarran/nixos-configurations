@@ -35,6 +35,7 @@
     "nix-command"
     "flakes"
   ];
+  nix.settings.sandbox = false;
 
   environment.systemPackages = with pkgs; [
     neovim

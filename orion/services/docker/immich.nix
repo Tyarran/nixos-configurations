@@ -11,6 +11,7 @@
         # === Immich Server ===
         immich-server.service = {
           image = "ghcr.io/immich-app/immich-server:release";
+          pull_policy = "always";
           container_name = "immich_server";
 
           ports = [ "8084:2283" ];
@@ -40,6 +41,7 @@
         immich-machine-learning.service = {
           # ARM Neural Network optimized image for Raspberry Pi 4
           image = "ghcr.io/immich-app/immich-machine-learning:release-armnn";
+          pull_policy = "always";
           container_name = "immich_machine_learning";
 
           volumes = [ "model-cache:/cache" ];
