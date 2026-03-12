@@ -21,13 +21,12 @@
       mise
       eza
       bat
-      unstable.opencode
+      opencode
       tmuxp
-      unstable.ghostty
+      ghostty
       cargo
       gcc
       gnumake
-      python3
       chezmoi
       gh
       kitty

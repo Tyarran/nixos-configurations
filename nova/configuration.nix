@@ -10,12 +10,6 @@
   ...
 }:
 
-let
-  # Import du module cockpit-nix depuis GitHub
-  cockpit-nix = import (fetchTarball "https://github.com/addreas/cockpit-nix/archive/main.tar.gz") {
-    inherit pkgs;
-  };
-in
 {
   imports = [
     ./hardware-configuration.nix
@@ -23,6 +17,7 @@ in
     ./locale.nix
     ./keyboard.nix
     ./services
+    ./applications
   ];
 
   # Secrets management
@@ -37,6 +32,13 @@ in
 
   # Use latest kernel
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  boot.kernelParams = lib.mkAfter [
+    "i915.enable_psr=1"
+    "i915.enable_psr2_sel_fetch=1"
+    "i915.enable_fbc=1"
+    "i915.enable_dc=2"
+    "i915.enable_guc=2"
+  ];
 
   # Networking
   networking.hostName = "nova";
@@ -77,8 +79,7 @@ in
   # System packages
   environment.systemPackages = with pkgs; [
     wget
-    unstable.neovim
-    unstable.btop
+    btop
     htop
     powertop
     thermald
@@ -96,22 +97,35 @@ in
     gsound
     nvtopPackages.intel
     lm_sensors
-    cockpit
     lix
     kexec-tools
     libva-vdpau-driver
     wireguard-tools
     unzip
     solaar
-    ssh-to-age
+    # ssh-to-age
     agenix
     sops
     age
     ragenix
+    libva-utils
+    jujutsu
+  ];
+
+  nix.settings.auto-optimise-store = true;
+  nix.gc.automatic = true;
+  nix.gc.dates = "weekly";
+  nix.gc.options = "--delete-older-than 30d";
+
+  programs.nix-ld.enable = true;
+  programs.nix-ld.libraries = with pkgs; [
+    # Add any missing dynamic libraries for unpackaged programs
+    # here, NOT in environment.systemPackages
   ];
 
   # Services
-  services.printing.enable = false;
+  # services.printing.enable = false;
+  services.fwupd.enable = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
