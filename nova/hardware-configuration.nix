@@ -35,22 +35,37 @@
   fileSystems."/" = {
     device = "/dev/mapper/cryptdev";
     fsType = "btrfs";
-    options = [ "subvol=@" ];
+    options = [
+      "subvol=@"
+      "noatime" # Don't update access time (performance)
+      "compress=zstd:1" # Light compression for better I/O
+      "discard=async" # Async TRIM for SSD
+    ];
   };
 
-  boot.initrd.luks.devices."cryptdev".device =
-    "/dev/disk/by-uuid/e2a92088-b263-401f-86fd-d12ec2823314";
+  boot.initrd.luks.devices."cryptdev" = {
+    device = "/dev/disk/by-uuid/e2a92088-b263-401f-86fd-d12ec2823314";
+    allowDiscards = true; # Enable TRIM/discard support for SSD through LUKS
+  };
 
   fileSystems."/var/lib/swap" = {
     device = "/dev/mapper/cryptdev";
     fsType = "btrfs";
-    options = [ "subvol=@swap" ];
+    options = [
+      "subvol=@swap"
+      "noatime"
+    ];
   };
 
   fileSystems."/home" = {
     device = "/dev/mapper/cryptdev";
     fsType = "btrfs";
-    options = [ "subvol=@home" ];
+    options = [
+      "subvol=@home"
+      "noatime"
+      "compress=zstd:1"
+      "discard=async"
+    ];
   };
 
   fileSystems."/boot" = {
