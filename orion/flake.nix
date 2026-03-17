@@ -17,6 +17,7 @@
 
   outputs =
     {
+      self,
       nixpkgs,
       agenix,
       arion,
@@ -30,7 +31,10 @@
           agenix.nixosModules.default
           arion.nixosModules.arion
         ];
-        specialArgs = { inherit agenix; };
+        specialArgs = {
+          inherit agenix;
+          flakeRoot = self;
+        };
       };
     };
 }

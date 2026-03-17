@@ -1,22 +1,27 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  flakeRoot,
+  ...
+}:
 
 {
   # Secrets
   age.secrets = {
     orion-scaleway-access-key = {
-      file = ../../secrets/orion-scaleway-access-key.age;
+      file = "${flakeRoot}/secrets/orion-scaleway-access-key.age";
       mode = "0400";
       owner = "root";
     };
 
     orion-scaleway-secret-key = {
-      file = ../../secrets/orion-scaleway-secret-key.age;
+      file = "${flakeRoot}/secrets/orion-scaleway-secret-key.age";
       mode = "0400";
       owner = "root";
     };
 
     orion-backup-password = {
-      file = ../../secrets/orion-backup-password.age;
+      file = "${flakeRoot}/secrets/orion-backup-password.age";
       mode = "0400";
       owner = "root";
     };

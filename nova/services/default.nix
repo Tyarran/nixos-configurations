@@ -9,5 +9,7 @@
     ./flatpak.nix
     ./power-management.nix
     ./wireguard.nix
+    ./gpu.nix
+    ./io-scheduler.nix
   ];
 }

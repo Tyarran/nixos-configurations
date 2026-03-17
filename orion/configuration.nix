@@ -7,6 +7,7 @@
   lib,
   pkgs,
   agenix,
+  flakeRoot,
   ...
 }:
 
@@ -18,7 +19,7 @@
   ];
 
   age.secrets.orion-romain-password = {
-    file = ../secrets/orion-romain-password.age;
+    file = "${flakeRoot}/secrets/orion-romain-password.age";
   };
 
   age.identityPaths = [ "/etc/age/age.key" ];

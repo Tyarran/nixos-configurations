@@ -1,5 +1,14 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  flakeRoot,
+  ...
+}:
 
+let
+  # Version d'Immich à déployer
+  immichVersion = "v2.6.2"; # Mettre à jour cette version pour upgrader Immich
+in
 {
   # Configuration Arion pour Immich
   virtualisation.arion = {
@@ -10,8 +19,7 @@
 
         # === Immich Server ===
         immich-server.service = {
-          image = "ghcr.io/immich-app/immich-server:release";
-          pull_policy = "always";
+          image = "ghcr.io/immich-app/immich-server:${immichVersion}";
           container_name = "immich_server";
 
           ports = [ "8084:2283" ];
@@ -40,8 +48,7 @@
         # === Immich Machine Learning (ARM optimized) ===
         immich-machine-learning.service = {
           # ARM Neural Network optimized image for Raspberry Pi 4
-          image = "ghcr.io/immich-app/immich-machine-learning:release-armnn";
-          pull_policy = "always";
+          image = "ghcr.io/immich-app/immich-machine-learning:${immichVersion}-armnn";
           container_name = "immich_machine_learning";
 
           volumes = [ "model-cache:/cache" ];
@@ -144,7 +151,7 @@
 
   # Configuration du secret agenix
   age.secrets.orion-immich-db-password = {
-    file = ../../../secrets/orion-immich-db-password.age;
+    file = "${flakeRoot}/secrets/orion-immich-db-password.age";
     mode = "0400";
     owner = "root";
   };
