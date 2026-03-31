@@ -7,6 +7,7 @@
     ./samba.nix
     ./dnsmasq.nix
     ./docker.nix
+    ./docker/home-assistant.nix
     ./backup.nix
   ];
 }
