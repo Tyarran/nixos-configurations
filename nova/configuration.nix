@@ -119,8 +119,15 @@
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 
-  # Unstable overlay
+  # Overlays: disable solaar tests and add unstable packages
   nixpkgs.overlays = [
+    # Disable solaar tests due to D-Bus machine-id requirement in build environment
+    (final: prev: {
+      solaar = prev.solaar.overrideAttrs (old: {
+        doCheck = false;
+      });
+    })
+    # Unstable packages overlay
     (final: prev: {
       unstable =
         import
@@ -132,7 +139,7 @@
           })
           {
             system = prev.stdenv.hostPlatform.system;
-            config = final.config;
+            config.allowUnfree = true;
           };
     })
   ];
