@@ -7,7 +7,7 @@
 
 let
   # Version d'Immich à déployer
-  immichVersion = "v2.6.2"; # Mettre à jour cette version pour upgrader Immich
+  immichVersion = "v3.3.3"; # Mettre à jour cette version pour upgrader Immich
 in
 {
   # Configuration Arion pour Immich
