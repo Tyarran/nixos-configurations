@@ -2,7 +2,7 @@
   description = "NixOS configuration for nova";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
     agenix = {
       url = "github:ryantm/agenix";
@@ -11,7 +11,7 @@
   };
 
   outputs =
-    { nixpkgs, agenix, ... }:
+    { self, nixpkgs, agenix, ... }:
     {
       nixosConfigurations.nova = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
@@ -19,7 +19,10 @@
           ./configuration.nix
           agenix.nixosModules.default
         ];
-        specialArgs = { inherit agenix; };
+        specialArgs = {
+          inherit agenix;
+          flakeRoot = self;
+        };
       };
     };
 }
