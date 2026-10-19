@@ -6,7 +6,6 @@
 }:
 
 let
-  # Version d'Immich à déployer
   immichVersion = "v3.3.3"; # Mettre à jour cette version pour upgrader Immich
 in
 {
@@ -79,9 +78,9 @@ in
           restart = "always";
         };
 
-        # === PostgreSQL with pgvecto.rs ===
+        # === PostgreSQL with VectorChord ===
         database.service = {
-          image = "docker.io/tensorchord/pgvecto-rs:pg14-v0.2.0@sha256:90724186f0a3517cf6914295b5ab410db9ce23190a2d9d0b9dd6463e3fa298f0";
+          image = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0";
           container_name = "immich_postgres";
 
           environment = {
@@ -94,31 +93,6 @@ in
           volumes = [
             "/srv/storage/containers_data/Immich/postgres:/var/lib/postgresql/data"
           ];
-
-          command = [
-            "postgres"
-            "-c"
-            "shared_preload_libraries=vectors.so"
-            "-c"
-            ''search_path="$$user", public, vectors''
-            "-c"
-            "logging_collector=on"
-            "-c"
-            "max_wal_size=1GB"
-            "-c"
-            "shared_buffers=256MB"
-            "-c"
-            "wal_compression=on"
-          ];
-
-          healthcheck = {
-            test = [
-              "CMD-SHELL"
-              ''pg_isready --dbname="$POSTGRES_DB" --username="$POSTGRES_USER" || exit 1''
-            ];
-            interval = "5m";
-            start_period = "5m";
-          };
 
           restart = "always";
         };

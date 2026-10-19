@@ -155,8 +155,6 @@
     dfc
     irqbalance
     intel-gpu-tools
-    intel-vaapi-driver
-    intel-media-driver
     intel-graphics-compiler
     tmux
     yubico-pam
@@ -167,7 +165,6 @@
     lm_sensors
     lix
     kexec-tools
-    libva-vdpau-driver
     wireguard-tools
     unzip
     # solaar
@@ -177,6 +174,7 @@
     age
     ragenix
     libva-utils
+    vulkan-tools
     jujutsu
   ];
 

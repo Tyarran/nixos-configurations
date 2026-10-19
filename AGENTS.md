@@ -7,6 +7,7 @@
 - `nixos-rebuild build --flake .#orion`: Build orion (aarch64-linux) configuration
 - `nixos-rebuild switch --flake .#<host>`: Build and apply configuration to current system
 - `nixos-rebuild test --flake .#<host>`: Test configuration temporarily without modifying bootloader
+- `nixos-rebuild switch --flake .#orion --build-host 192.168.1.200 --target-host 192.168.1.200 --sudo --ask-sudo-password`: Update Orion remotely (build and activation on Orion)
 
 ### Lint/Format Commands
 - `nixfmt .`: Format all Nix files (REQUIRED before committing)

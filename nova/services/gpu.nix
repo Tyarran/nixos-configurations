@@ -11,14 +11,11 @@
 
     # Intel-specific drivers
     extraPackages = with pkgs; [
-      intel-vaapi-driver # VA-API support (legacy)
       intel-media-driver # iHD VA-API driver (modern, recommended for Gen 8+)
-      intel-compute-runtime # OpenCL support
-      vpl-gpu-rt # Intel VPL GPU runtime for video processing
+      intel-compute-runtime-legacy1 # OpenCL support (Gen8-11)
     ];
 
     extraPackages32 = with pkgs.driversi686Linux; [
-      intel-vaapi-driver
       intel-media-driver
     ];
   };
@@ -26,14 +23,10 @@
   # Environment variables for GPU acceleration
   environment.sessionVariables = {
     # VA-API: Use iHD driver (intel-media-driver) for Whiskey Lake
-    LIBVA_DRIVER_NAME = "iHd";
+    LIBVA_DRIVER_NAME = "iHD";
 
     # Enable hardware video acceleration in browsers
     MOZ_ENABLE_WAYLAND = "1"; # Firefox Wayland support
-    MOZ_USE_XINPUT2 = "1"; # Better touchpad/mouse support
-
-    # Vulkan
-    VK_ICD_FILENAMES = "/run/opengl-driver/share/vulkan/icd.d/intel_icd.x86_64.json";
   };
 
   # Additional i915 kernel parameters for optimal GPU performance
