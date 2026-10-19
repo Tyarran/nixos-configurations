@@ -2,7 +2,7 @@
 
 {
   imports = [
-    ./cosmic.nix
+    # ./cosmic.nix
     ./gnome.nix
     ./yubikey.nix
     ./pipewire.nix

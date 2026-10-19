@@ -122,11 +122,11 @@
   # Overlays: disable solaar tests and add unstable packages
   nixpkgs.overlays = [
     # Disable solaar tests due to D-Bus machine-id requirement in build environment
-    (final: prev: {
-      solaar = prev.solaar.overrideAttrs (old: {
-        doCheck = false;
-      });
-    })
+    # (final: prev: {
+    #   solaar = prev.solaar.overrideAttrs (old: {
+    #     doCheck = false;
+    #   });
+    # })
     # Unstable packages overlay
     (final: prev: {
       unstable =
@@ -170,7 +170,7 @@
     libva-vdpau-driver
     wireguard-tools
     unzip
-    solaar
+    # solaar
     # ssh-to-age
     agenix
     sops
