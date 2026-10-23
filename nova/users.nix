@@ -41,8 +41,8 @@
       nixfmt
       statix
       deadnix
-			libreoffice-fresh
-			darktable
+      libreoffice-fresh
+      darktable
     ];
     hashedPasswordFile = config.age.secrets.romain-password.path;
   };

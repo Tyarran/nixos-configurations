@@ -4,6 +4,8 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
 
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
+
     agenix = {
       url = "github:ryantm/agenix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -19,6 +21,7 @@
     {
       self,
       nixpkgs,
+      nixpkgs-unstable,
       agenix,
       arion,
       ...
@@ -33,7 +36,7 @@
             agenix.nixosModules.default
           ];
           specialArgs = {
-            inherit agenix;
+            inherit agenix nixpkgs-unstable;
             flakeRoot = ./.;
           };
         };

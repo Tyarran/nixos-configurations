@@ -8,6 +8,7 @@
   lib,
   agenix,
   flakeRoot,
+  nixpkgs-unstable,
   ...
 }:
 
@@ -36,13 +37,8 @@
   boot.kernelParams = lib.mkAfter [
     # Intel i915 GPU optimizations
     "i915.enable_psr=1" # Panel Self Refresh - reduces power
-    "i915.enable_psr2_sel_fetch=1" # PSR2 selective fetch - more efficient
     "i915.enable_fbc=1" # Framebuffer compression - saves bandwidth
-    "i915.enable_dc=2" # Display C-states - deeper power saving
-    "i915.enable_guc=2" # GuC firmware submission + HuC
     "i915.fastboot=1" # Faster boot by reusing GOP/UEFI framebuffer
-    # CPU optimizations
-    "mitigations=off" # Balance security and performance
   ];
 
   # Kernel sysctl tuning for desktop performance
@@ -55,12 +51,12 @@
     # Reduce dirty page ratios for better responsiveness on SSD
     "vm.dirty_ratio" = 10; # Start blocking writes at 10% RAM (down from 20%)
     "vm.dirty_background_ratio" = 5; # Start background writes at 5% RAM (down from 10%)
-    # More aggressive dirty page writeback for responsiveness
-    "vm.dirty_writeback_centisecs" = 1500; # Write every 15s (down from 5s)
-    "vm.dirty_expire_centisecs" = 6000; # Expire after 60s (down from 30s)
+    # Kernel defaults, suited to NVMe
+    "vm.dirty_writeback_centisecs" = 500; # Write every 5s
+    "vm.dirty_expire_centisecs" = 3000; # Expire after 30s
 
     # === Network Performance ===
-    "net.core.default_qdisc" = "fq_codel"; # Better latency under load
+    "net.core.default_qdisc" = "fq"; # Recommended qdisc for BBR
     "net.ipv4.tcp_congestion_control" = "bbr"; # Google BBR for better throughput
     "net.ipv4.tcp_fastopen" = 3; # Enable TFO for client and server
     "net.core.netdev_max_backlog" = 16384; # Increase network queue (from 1000)
@@ -75,13 +71,16 @@
     # === File System ===
     # Increase inotify limits for development (VS Code, file watchers, etc.)
     "fs.inotify.max_user_watches" = 1048576; # 1M watches (up from 524288)
-    "fs.inotify.max_user_instances" = 1024; # 1024 instances (up from 524288 - seems wrong)
+    "fs.inotify.max_user_instances" = 1024; # 1024 instances (kernel default is 128)
 
     # === Kernel ===
     # Disable watchdogs to save CPU cycles (safe on desktop)
     "kernel.nmi_watchdog" = 0;
     "kernel.watchdog" = 0;
   };
+
+  # Clean /tmp on boot (RAM is too small for tmpfs during Nix builds)
+  boot.tmp.cleanOnBoot = true;
 
   # Networking
   networking.hostName = "nova";
@@ -129,18 +128,10 @@
     # })
     # Unstable packages overlay
     (final: prev: {
-      unstable =
-        import
-          (prev.fetchFromGitHub {
-            owner = "NixOS";
-            repo = "nixpkgs";
-            rev = "nixos-unstable";
-            sha256 = "sha256-QEhk0eXgyIqTpJ/ehZKg9IKS7EtlWxF3N7DXy42zPfU=";
-          })
-          {
-            system = prev.stdenv.hostPlatform.system;
-            config.allowUnfree = true;
-          };
+      unstable = import nixpkgs-unstable {
+        system = prev.stdenv.hostPlatform.system;
+        config.allowUnfree = true;
+      };
     })
   ];
 
@@ -151,9 +142,7 @@
     htop
     powertop
     thermald
-    tuned
     dfc
-    irqbalance
     intel-gpu-tools
     intel-graphics-compiler
     tmux
@@ -178,10 +167,14 @@
     jujutsu
   ];
 
-  nix.settings.auto-optimise-store = true;
+  nix.settings.trusted-users = [
+    "root"
+    "@wheel"
+  ];
+  nix.optimise.automatic = true;
   nix.gc.automatic = true;
-  nix.gc.dates = "03:00";
-  nix.gc.persistent = true;
+  nix.gc.dates = "weekly";
+  nix.gc.persistent = false; # avoid a long catch-up GC at boot
   nix.gc.options = "--delete-older-than 14d";
 
   programs.nix-ld.enable = true;
