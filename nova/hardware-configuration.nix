@@ -23,13 +23,17 @@
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
   boot.kernel.sysctl = {
-    "vm.swappiness" = 40;
+    "vm.swappiness" = 100;
     "vm.vfs_cache_pressure" = 50;
     "vm.page-cluster" = 0;
   };
 
   boot.kernelParams = [
-    "zswap.enabled=0"
+    "zswap.enabled=1"
+    "zswap.compressor=zstd"
+    "zswap.zpool=zsmalloc"
+    "zswap.max_pool_percent=25"
+    "zswap.shrinker_enabled=1"
   ];
 
   fileSystems."/" = {
@@ -77,18 +81,8 @@
     ];
   };
 
-  # swapDevices = [
-  #   {
-  #     device = "/var/lib/swap/swapfile";
-  #     priority = 10;
-  #   }
-  # ];
-
-  zramSwap = {
-    enable = true;
-    priority = 100;
-    memoryPercent = 85;
-  };
+  # Swapfile (Btrfs @swap, 16 GiB) backing zswap
+  swapDevices = [ { device = "/var/lib/swap/swapfile"; } ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.intel.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
