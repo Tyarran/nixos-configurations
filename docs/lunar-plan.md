@@ -38,11 +38,9 @@ Modules : `base` (Nix, nix-ld, fuseau, locale, clavier, NetworkManager, agenix, 
 
 Validation : `drvPath` de `nova` comparé à la référence, puis `nixos-rebuild build --flake .#nova`.
 
-## Phase 2 : refactor de `orion`
+## Phase 2 : (déplacée en phase 10)
 
-`base` + module `server` (samba, dnsmasq, cockpit, backup, docker). Conserver sa clé age (`/etc/age/age.key`) et son `stateVersion`.
-
-Validation : `drvPath` comparé, build si possible (aarch64).
+Le refactor d'`orion` est reporté en fin de projet (voir phase 10). Conséquence pour la phase 1 : `base` reste **minimal** (réglages Nix/flakes/GC, fuseau, NetworkManager, agenix). Locale, clavier, `systemd-oomd`, `fstrim` et `nix-ld` vont dans un module séparé importé seulement par `nova` et `lunar`, pour ne rien imposer au serveur.
 
 ## Phase 3 : flake.nix
 
@@ -75,6 +73,12 @@ Validation : build seulement ; test d'exécution possible uniquement au premier 
 ## Phase 9 : validation finale
 
 `nixfmt .`, `statix check .`, `deadnix .`, build des 3 hôtes, comparaison des `drvPath`, relecture de `jj diff` (aucun secret ni `.deb`).
+
+## Phase 10 : refactor d'`orion` (en dernier)
+
+Faire le strict minimum : importer `base` (minimal), éventuellement regrouper ses services dans un module `server`. Conserver sa clé age (`/etc/age/age.key`), son `stateVersion = "25.11"` et ses surcharges (GC 30 jours, `sandbox = false`, `auto-optimise-store`).
+
+Validation : depuis Orion lui-même (`nixos-rebuild build`), car l'évaluation depuis `nova` échoue sans builder aarch64 (service arion `arion-deconz`). Pas de comparaison de `drvPath` possible depuis x86_64 sans builder.
 
 ## Hors périmètre
 
