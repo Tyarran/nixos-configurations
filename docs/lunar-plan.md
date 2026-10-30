@@ -89,3 +89,27 @@ Bascule Arch -> NixOS, migration chezmoi/home-manager, caméra, Yubikey, TLP.
 - `stateVersion` 26.11 vs flake 26.05 : à vérifier au premier build.
 - Clé Vanta exposée dans une session de travail : régénération optionnelle (`agenix -e`).
 - Nom et disponibilité des paquets listés en phase 7.
+
+## Statut d'implémentation
+
+Phases 0 à 9 faites ; phase 10 (orion) volontairement non faite.
+
+Vérifié :
+- `nova` évalue ; `system-path` a les mêmes 217 dépendances qu'avant (ordre différent). Seules différences voulues : unités flatpak (`nix-flatpak` remplace `flatpak-repo`).
+- `lunar` : évaluation sans avertissement et **build complet réussi** (kernel 7.2.10, Hyprland + GNOME, tous les services listés).
+- `intel-lpmd` (paquet maison) compile ; hash Vanta confirmé.
+
+Non testé (impossible sans démarrer sur `lunar`) :
+- Exécution de SentinelOne (nix-ld, copie dans `/opt/sentinelone`, eBPF, enrôlement par token) et de Vanta (copie dans `/var/vanta`, `/etc/vanta.conf`).
+- `WatchdogSec=30s` du .deb de SentinelOne volontairement omis.
+- Empreinte (hyprlock, sudo, GDM), `scx_cosmos` AC/batterie, `intel_lpmd`, IRQ 29 (numéro repris de l'Arch).
+- Mesa depuis `unstable` + kernel latest (choix pour Lunar Lake).
+- Le `.deb` SentinelOne doit être dans le store avant le build :
+  `nix-store --add-fixed sha256 SentinelAgent_linux_x86_64_v25_4_2_21.deb` (déjà fait sur cette machine).
+
+Écarts et choix faits à l'implémentation :
+- `claude-desktop`, `snypr`, `memcastle`, `whatsdesk` absents de nixpkgs : non installés (ZapZap et `hyprshot` les remplacent en partie).
+- `nordvpn` : module importé depuis `nixpkgs-unstable` (absent de la stable) ; il impose `documentation.nixos.enable = false`.
+- Wi-Fi via iwd (comme sur l'Arch) ; pas de gestion `wifi-powersave` par udev.
+- `/home` en `neededForBoot` pour que la clé age soit lisible à l'activation.
+- Flake : `nix flake` ignore les fichiers non suivis par git ; vérifié via `path:.`.
