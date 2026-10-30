@@ -1,3 +1,4 @@
+# Locale française, clavier us-intl et console us-acentos.
 { ... }:
 
 {
@@ -14,4 +15,13 @@
     LC_TELEPHONE = "fr_FR.UTF-8";
     LC_TIME = "fr_FR.UTF-8";
   };
+
+  # Configure keymap in X11
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "intl";
+  };
+
+  # Configure console keymap
+  console.keyMap = "us-acentos";
 }

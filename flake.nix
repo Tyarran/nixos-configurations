@@ -15,6 +15,8 @@
       url = "github:hercules-ci/arion";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    nix-flatpak.url = "github:gmodena/nix-flatpak";
   };
 
   outputs =
@@ -24,6 +26,7 @@
       nixpkgs-unstable,
       agenix,
       arion,
+      nix-flatpak,
       ...
     }:
     {
@@ -34,6 +37,21 @@
           modules = [
             ./nova/configuration.nix
             agenix.nixosModules.default
+            nix-flatpak.nixosModules.nix-flatpak
+          ];
+          specialArgs = {
+            inherit agenix nixpkgs-unstable;
+            flakeRoot = ./.;
+          };
+        };
+
+        # Lunar configuration : poste de travail Dell XPS 13 (x86_64-linux)
+        lunar = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          modules = [
+            ./lunar/configuration.nix
+            agenix.nixosModules.default
+            nix-flatpak.nixosModules.nix-flatpak
           ];
           specialArgs = {
             inherit agenix nixpkgs-unstable;

@@ -3,13 +3,12 @@
 {
   imports = [
     # ./cosmic.nix
-    ./gnome.nix
+    ../../modules/desktop
+    ../../modules/desktop/gnome.nix
     ./yubikey.nix
-    ./pipewire.nix
-    ./flatpak.nix
-    ./power-management.nix
+    ../../modules/hardware/power-profiles.nix
     ./wireguard.nix
     ./gpu.nix
-    ./io-scheduler.nix
+    ../../modules/hardware/nvme.nix
   ];
 }
