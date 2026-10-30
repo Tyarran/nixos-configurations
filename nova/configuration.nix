@@ -8,7 +8,6 @@
   lib,
   agenix,
   flakeRoot,
-  nixpkgs-unstable,
   ...
 }:
 
@@ -16,10 +15,11 @@
   imports = [
     ./hardware-configuration.nix
     ./users.nix
-    ./locale.nix
-    ./keyboard.nix
     ./services
-    ./applications
+    ../modules/base.nix
+    ../modules/locale.nix
+    ../modules/workstation.nix
+    ../modules/dev/neovim.nix
   ];
 
   # Secrets management
@@ -84,15 +84,6 @@
 
   # Networking
   networking.hostName = "nova";
-  networking.networkmanager.enable = true;
-
-  # Timezone
-  time.timeZone = "Europe/Paris";
-
-  # Nix settings
-  nix.extraOptions = ''
-    experimental-features = nix-command flakes
-  '';
 
   # Remote builders for aarch64
   nix.buildMachines = [
@@ -114,26 +105,6 @@
 
   # Enable ARM emulation for building Raspberry Pi configs
   boot.binfmt.emulatedSystems = [ "aarch64-linux" ];
-
-  # Allow unfree packages
-  nixpkgs.config.allowUnfree = true;
-
-  # Overlays: disable solaar tests and add unstable packages
-  nixpkgs.overlays = [
-    # Disable solaar tests due to D-Bus machine-id requirement in build environment
-    # (final: prev: {
-    #   solaar = prev.solaar.overrideAttrs (old: {
-    #     doCheck = false;
-    #   });
-    # })
-    # Unstable packages overlay
-    (final: prev: {
-      unstable = import nixpkgs-unstable {
-        system = prev.stdenv.hostPlatform.system;
-        config.allowUnfree = true;
-      };
-    })
-  ];
 
   # System packages
   environment.systemPackages = with pkgs; [
@@ -167,38 +138,11 @@
     jujutsu
   ];
 
-  nix.settings.trusted-users = [
-    "root"
-    "@wheel"
-  ];
-  nix.optimise.automatic = true;
-  nix.gc.automatic = true;
-  nix.gc.dates = "weekly";
-  nix.gc.persistent = false; # avoid a long catch-up GC at boot
-  nix.gc.options = "--delete-older-than 14d";
-
-  programs.nix-ld.enable = true;
-  programs.nix-ld.libraries = with pkgs; [
-    # Add any missing dynamic libraries for unpackaged programs
-    # here, NOT in environment.systemPackages
-  ];
+  # GC plus agressif que le défaut commun
+  # (base.nix : weekly, --delete-older-than 14d)
 
   # Services
   # services.printing.enable = false;
-  services.fwupd.enable = true;
-  services.fwupd.daemonSettings.IdleTimeout = 86400;
-
-  # Disable NetworkManager wait-online to speed up boot
-  systemd.services.NetworkManager-wait-online.enable = false;
-
-  # Enable fstrim for SSD optimization
-  services.fstrim.enable = true;
-  services.fstrim.interval = "weekly";
-
-  # Enable systemd-oomd for better memory management
-  systemd.oomd.enable = true;
-  systemd.oomd.enableRootSlice = true;
-  systemd.oomd.enableUserSlices = true;
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
