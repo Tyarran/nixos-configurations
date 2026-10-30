@@ -38,5 +38,11 @@
 1. Create module file in appropriate `services/` directory
 2. Add to `services/default.nix` imports list
 3. Run `nixfmt .` before committing
-4. Test with `nixos-rebuild build --flake .#<host>`</content>
-<parameter name="filePath">/home/romain/Projects/nixos-configurations/AGENTS.md
+4. Test with `nixos-rebuild build --flake .#<host>`
+
+### Commit Messages
+- Write every commit message in **English**
+- Use the **Conventional Commits** format on a **single line**: `type(scope): description` (e.g. `feat(lunar): add fingerprint support`)
+- Allowed types: `feat`, `fix`, `refactor`, `docs`, `chore`, `style`, `test`, `perf`, `build`, `ci`
+- No body or footer; keep the subject short and in the imperative mood
+- Applies to `jj describe` and `jj commit` alike
